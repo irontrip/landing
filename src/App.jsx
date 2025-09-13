@@ -66,7 +66,6 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Nomads */}
             <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] flex flex-col">
-              <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-cyan-400/25 via-fuchsia-400/10 to-indigo-500/20 blur-xl" />
               <img
                 src={`${import.meta.env.BASE_URL}icons/road.png`}
                 alt="Road icon"
@@ -85,7 +84,6 @@ function App() {
             </div>
             {/* Locals */}
             <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] flex flex-col">
-              <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-indigo-500/25 via-fuchsia-400/10 to-cyan-400/20 blur-xl" />
               <img
                 src={`${import.meta.env.BASE_URL}icons/kettlebell.png`}
                 alt="Kettlebell icon"
