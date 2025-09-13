@@ -72,17 +72,26 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Deploy Preview to GitHub Pages
+        id: preview
+        if: github.event_name == 'pull_request'
+        uses: actions/deploy-pages@v4
+
       - name: Deploy to GitHub Pages (production)
         id: deployment
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/deploy-pages@v4
 
-      - name: PR note (previews disabled to protect production)
+      - name: Comment preview URL on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
+        env:
+          PREVIEW_URL: ${{ steps.preview.outputs.page_url }}
         with:
           script: |
-            const pr = context.payload.pull_request && context.payload.pull_request.number;
-            if (!pr) { core.info('No PR context'); return; }
-            const body = 'Preview deploys are temporarily disabled for PRs to avoid overwriting production. Build succeeded; only main publishes.';
+            const pr = (context.payload.pull_request && context.payload.pull_request.number) || null;
+            if (!pr) { core.info('No PR number found'); return; }
+            const url = process.env.PREVIEW_URL || '';
+            if (!url) { core.warning('No preview URL from deploy step'); return; }
+            const body = `🚀 Preview deployed: ${url}`;
             await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pr, body });
