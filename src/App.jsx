@@ -58,8 +58,8 @@ function App() {
       </section>
 
       {/* Value Props */}
-      <section className="relative -mt-2 sm:-mt-4 lg:-mt-6">
-        <div className="mx-auto max-w-7xl px-6 pb-16">
+      <section className="relative mt-6 sm:mt-8 lg:mt-10">
+        <div className="mx-auto max-w-7xl px-6 pb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Nomads */}
             <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07]">
