@@ -12,7 +12,7 @@ export const translations = {
       headline2: 'Community that lasts.',
       sub: 'Irontrip helps nomads keep their training rituals alive anywhere — and gives locals a way to share their gear, connect, and build community.',
       ctaWaitlist: '👉 Join Waitlist',
-      ctaLend: '👉 Lend Your Gear',
+      ctaLend: '👉 Share Your Gear',
     },
     value: {
       nomadsTitle: 'For Nomads',
@@ -22,7 +22,7 @@ export const translations = {
       localsTitle: 'For Locals',
       localsHeadline: 'Your gear, their journey.',
       localsBody:
-        'Lend your equipment, meet like‑minded people, and spark connections rooted in movement and resilience. Build community while empowering nomads.',
+        'Share your equipment, meet like‑minded people, and spark connections rooted in movement and resilience. Build community while empowering nomads.',
     },
     footer: {
       privacy: 'Privacy',
@@ -39,7 +39,7 @@ export const translations = {
       headline2: 'Comunidad que perdura.',
       sub: 'Irontrip ayuda a nómadas a mantener sus rituales de entrenamiento en cualquier lugar — y ofrece a locales una forma de compartir su equipo, conectar y construir comunidad.',
       ctaWaitlist: '👉 Únete a la lista de espera',
-      ctaLend: '👉 Presta tu equipo',
+      ctaLend: '👉 Comparte tu equipo',
     },
     value: {
       nomadsTitle: 'Para Nómadas',
@@ -49,7 +49,7 @@ export const translations = {
       localsTitle: 'Para Locales',
       localsHeadline: 'Tu equipo, su viaje.',
       localsBody:
-        'Presta tu equipamiento, conoce a personas afines y crea conexiones basadas en el movimiento y la resiliencia. Construye comunidad mientras apoyas a nómadas.',
+        'Comparte tu equipamiento, conoce a personas afines y crea conexiones basadas en el movimiento y la resiliencia. Construye comunidad mientras apoyas a nómadas.',
     },
     footer: {
       privacy: 'Privacidad',
