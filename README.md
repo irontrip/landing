@@ -36,3 +36,24 @@ The workflow copies `dist/index.html` to `dist/404.html`, which enables client�
 
 ## ESLint
 Type‑aware rules require TypeScript. For TS setup, see the Vite React TS template and `typescript-eslint` docs.
+
+## Performance (Lighthouse CI)
+This project runs Lighthouse CI in the Pages workflow to guard performance and quality.
+
+- Config: `.lighthouserc.json`
+- What it does: builds the app, serves it via `vite preview` on port 4173, runs Lighthouse 3 times, and enforces score thresholds.
+- Thresholds (change in `.lighthouserc.json`):
+  - Performance ≥ 0.90 (error if below)
+  - Accessibility / Best‑Practices / SEO ≥ 0.90 (warnings)
+- Upload: results go to temporary public storage (the job output logs a report link).
+
+Run locally:
+```bash
+npm run build
+npx lhci autorun --config=.lighthouserc.json
+```
+
+Tuning tips:
+- Lower or raise `minScore` thresholds as the app evolves.
+- Add specific audits to `assert.assertions` if needed (e.g., first-contentful-paint).
+- For authenticated pages or routes, add more `collect.url` entries or a custom start command.
