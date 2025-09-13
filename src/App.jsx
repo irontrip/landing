@@ -66,6 +66,12 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Nomads */}
             <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] flex flex-col">
+              <img
+                src={`${import.meta.env.BASE_URL}icons/road.png`}
+                alt="Road icon"
+                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-15 mix-blend-screen"
+                draggable="false"
+              />
               <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-indigo-500/10 via-fuchsia-500/5 to-cyan-500/10 pointer-events-none"></div>
               <h3 className="text-xl font-semibold text-white">{t('value.nomadsTitle')}</h3>
               <p className="mt-2 text-2xl font-bold text-slate-100">{t('value.nomadsHeadline')}</p>
@@ -78,6 +84,12 @@ function App() {
             </div>
             {/* Locals */}
             <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] flex flex-col">
+              <img
+                src={`${import.meta.env.BASE_URL}icons/kettlebell.png`}
+                alt="Kettlebell icon"
+                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-15 mix-blend-screen"
+                draggable="false"
+              />
               <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-cyan-500/10 via-fuchsia-500/5 to-indigo-500/10 pointer-events-none"></div>
               <h3 className="text-xl font-semibold text-white">{t('value.localsTitle')}</h3>
               <p className="mt-2 text-2xl font-bold text-slate-100">{t('value.localsHeadline')}</p>
