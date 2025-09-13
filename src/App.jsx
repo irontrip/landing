@@ -48,10 +48,8 @@ function App() {
         <div className="mx-auto max-w-7xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">
-              {t('hero.headline1')} 
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-cyan-400">
-                {t('hero.headline2')}
-              </span>
+              <span className="block">{t('hero.headline1')}</span>
+              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-cyan-400">{t('hero.headline2')}</span>
             </h1>
             <p className="mt-6 text-lg sm:text-xl leading-relaxed text-slate-300">{t('hero.sub')}</p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
