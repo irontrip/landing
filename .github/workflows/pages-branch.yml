@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ dev ]
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
 
 permissions:
   contents: write
@@ -89,3 +89,23 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist
           publish_branch: gh-pages
+
+  dev:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      - name: Publish current dev to gh-pages/dev
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          publish_branch: gh-pages
+          destination_dir: dev
+          keep_files: true
