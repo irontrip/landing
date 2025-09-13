@@ -10,6 +10,16 @@
     <meta property="og:title" content="Irontrip — Fitness that travels. Community that lasts." />
     <meta property="og:description" content="Keep your training rituals alive anywhere. Lend your gear, build community." />
     <meta property="og:type" content="website" />
+    <script>
+      (function(){
+        var p = location.pathname || '';
+        if (p.startsWith('/landing/dev')) {
+          var m1 = document.createElement('meta'); m1.name='robots'; m1.content='noindex, nofollow'; document.head.appendChild(m1);
+          var m2 = document.createElement('meta'); m2.name='googlebot'; m2.content='noindex, nofollow'; document.head.appendChild(m2);
+          var s = document.createElement('script'); s.src = './dev-gate.js'; s.defer = true; document.head.appendChild(s);
+        }
+      })();
+    </script>
     <script type="module" crossorigin src="./assets/index-B8ZqOpw3.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-mokYQU7R.css">
   </head>
