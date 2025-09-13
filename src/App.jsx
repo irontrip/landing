@@ -69,7 +69,7 @@ function App() {
               <img
                 src={`${import.meta.env.BASE_URL}icons/road.png`}
                 alt="Road icon"
-                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-15 mix-blend-screen"
+                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-60 drop-shadow-lg saturate-150 brightness-110"
                 draggable="false"
               />
               <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-indigo-500/10 via-fuchsia-500/5 to-cyan-500/10 pointer-events-none"></div>
@@ -87,7 +87,7 @@ function App() {
               <img
                 src={`${import.meta.env.BASE_URL}icons/kettlebell.png`}
                 alt="Kettlebell icon"
-                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-15 mix-blend-screen"
+                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-60 drop-shadow-lg saturate-150 brightness-110"
                 draggable="false"
               />
               <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-cyan-500/10 via-fuchsia-500/5 to-indigo-500/10 pointer-events-none"></div>
