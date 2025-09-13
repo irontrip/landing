@@ -33,6 +33,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Inspect build output
+        run: |
+          echo "Built files:" && ls -la dist
+
       - name: Lighthouse CI (performance budget)
         run: npx lhci autorun --config=./.lighthouserc.json
 
