@@ -36,6 +36,8 @@ jobs:
       - name: Inspect build output
         run: |
           echo "Built files:" && ls -la dist
+          echo "--- dist/index.html (head) ---"
+          head -n 30 dist/index.html
 
       - name: Lighthouse CI (performance budget)
         run: npx lhci autorun --config=./.lighthouserc.json
