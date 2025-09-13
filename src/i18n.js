@@ -8,6 +8,8 @@ export const translations = {
     brand: 'Irontrip',
     hero: {
       headline: 'Fitness that travels. Community that lasts.',
+      headline1: 'Fitness that travels.',
+      headline2: 'Community that lasts.',
       sub: 'Irontrip helps nomads keep their training rituals alive anywhere — and gives locals a way to share their gear, connect, and build community.',
       ctaWaitlist: '👉 Join Waitlist',
       ctaLend: '👉 Lend Your Gear',
@@ -33,6 +35,8 @@ export const translations = {
     brand: 'Irontrip',
     hero: {
       headline: 'Fitness que viaja. Comunidad que perdura.',
+      headline1: 'Fitness que viaja.',
+      headline2: 'Comunidad que perdura.',
       sub: 'Irontrip ayuda a nómadas a mantener sus rituales de entrenamiento en cualquier lugar — y ofrece a locales una forma de compartir su equipo, conectar y construir comunidad.',
       ctaWaitlist: '👉 Únete a la lista de espera',
       ctaLend: '👉 Presta tu equipo',
