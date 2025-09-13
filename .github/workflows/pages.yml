@@ -72,17 +72,57 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Deploy Preview to GitHub Pages
+        id: preview
+        if: github.event_name == 'pull_request'
+        uses: actions/deploy-pages@v4
+
+      - name: Resolve preview URL (API)
+        if: github.event_name == 'pull_request'
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPLOYMENT_ID: ${{ steps.preview.outputs.deployment_id }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DEPLOYMENT_ID:-}" ]; then
+            echo "No deployment_id from preview step" >&2
+            exit 0
+          fi
+          echo "Resolving preview URL for deployment $DEPLOYMENT_ID"
+          # Install jq if missing
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update -y && sudo apt-get install -y jq >/dev/null
+          fi
+          api="https://api.github.com/repos/${{ github.repository }}/pages/deployments/${DEPLOYMENT_ID}"
+          url=$(curl -sfSL -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$api" | jq -r '.preview_url // .page_url // ""')
+          echo "preview_url=$url" >> "$GITHUB_OUTPUT"
+          echo "Preview URL: $url" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment preview URL on PR (curl)
+        if: github.event_name == 'pull_request' && steps.resolve.outputs.preview_url != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREVIEW_URL: ${{ steps.resolve.outputs.preview_url }}
+        run: |
+          set -euo pipefail
+          pr_number='${{ github.event.pull_request.number }}'
+          data=$(jq -nc --arg body "🚀 Preview deployed: ${PREVIEW_URL}" '{body: $body}')
+          curl -sfSL -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -d "$data" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments"
+
       - name: Deploy to GitHub Pages (production)
         id: deployment
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/deploy-pages@v4
 
-      - name: PR note (previews disabled to protect production)
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const pr = context.payload.pull_request && context.payload.pull_request.number;
-            if (!pr) { core.info('No PR context'); return; }
-            const body = 'Preview deploys are temporarily disabled for PRs to avoid overwriting production. Build succeeded; only main publishes.';
-            await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pr, body });
+  preview_gate:
+    if: github.event_name == 'pull_request'
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preview ready gate
+        run: echo "Preview deployment succeeded and is ready for review."
