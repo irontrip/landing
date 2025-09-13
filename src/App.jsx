@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { translations, getText, availableLangs, detectInitialLang } from './i18n'
+import globe from '../globe.png'
 
 function App() {
   const [lang, setLang] = useState(detectInitialLang())
@@ -46,15 +47,28 @@ function App() {
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute -inset-x-40 -top-56 h-[32rem] rotate-12 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/10 to-cyan-500/20 blur-3xl"></div>
         <div className="mx-auto max-w-7xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">
-              <span className="block">{t('hero.headline1')}</span>
-              <span className="block bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-cyan-400">{t('hero.headline2')}</span>
-            </h1>
-            <p className="mt-6 text-lg sm:text-xl leading-relaxed text-slate-300">{t('hero.sub')}</p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a id="waitlist" href="#" className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-indigo-500 hover:bg-indigo-400 px-6 py-3 text-base font-medium text-white shadow-lg shadow-indigo-500/20 transition">{t('hero.ctaWaitlist')}</a>
-              <a id="lend" href="#" className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-white/20 hover:border-white/40 px-6 py-3 text-base font-medium text-white/90 backdrop-blur transition">{t('hero.ctaLend')}</a>
+          <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
+            {/* Text column */}
+            <div className="mx-auto max-w-3xl text-center lg:text-left">
+              <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">
+                <span className="block">{t('hero.headline1')}</span>
+                <span className="block bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-cyan-400">{t('hero.headline2')}</span>
+              </h1>
+              <p className="mt-6 text-lg sm:text-xl leading-relaxed text-slate-300">{t('hero.sub')}</p>
+              <div className="mt-10 flex flex-col sm:flex-row lg:justify-start items-center justify-center gap-3">
+                <a id="waitlist" href="#" className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-indigo-500 hover:bg-indigo-400 px-6 py-3 text-base font-medium text-white shadow-lg shadow-indigo-500/20 transition">{t('hero.ctaWaitlist')}</a>
+                <a id="lend" href="#" className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-white/20 hover:border-white/40 px-6 py-3 text-base font-medium text-white/90 backdrop-blur transition">{t('hero.ctaLend')}</a>
+              </div>
+            </div>
+
+            {/* Image column */}
+            <div className="relative">
+              <img
+                src={globe}
+                alt="Stylized globe graphic"
+                className="mx-auto lg:mx-0 w-[min(80vw,480px)] drop-shadow-[0_20px_60px_rgba(99,102,241,0.35)] select-none pointer-events-none"
+                draggable="false"
+              />
             </div>
           </div>
         </div>
