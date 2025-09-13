@@ -66,7 +66,7 @@ function App() {
               <img
                 src={globe}
                 alt="Stylized globe graphic"
-                className="mx-auto lg:mx-0 w-[min(80vw,480px)] drop-shadow-[0_20px_60px_rgba(99,102,241,0.35)] select-none pointer-events-none"
+                className="mx-auto lg:mx-0 w-64 sm:w-80 lg:w-[480px] drop-shadow-[0_20px_60px_rgba(99,102,241,0.35)] select-none pointer-events-none motion-safe:animate-float"
                 draggable="false"
               />
             </div>
