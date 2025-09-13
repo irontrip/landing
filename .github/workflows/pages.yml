@@ -95,3 +95,11 @@ jobs:
             if (!url) { core.warning('No preview URL from deploy step'); return; }
             const body = `🚀 Preview deployed: ${url}`;
             await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pr, body });
+
+  preview_gate:
+    if: github.event_name == 'pull_request'
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preview ready gate
+        run: echo "Preview deployment succeeded and is ready for review."
