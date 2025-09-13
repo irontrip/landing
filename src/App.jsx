@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { translations, getText, availableLangs, detectInitialLang } from './i18n'
+import globe from '../globe.png'
 
 function App() {
   const [lang, setLang] = useState(detectInitialLang())
@@ -45,6 +46,14 @@ function App() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute -inset-x-40 -top-56 h-[32rem] rotate-12 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/10 to-cyan-500/20 blur-3xl"></div>
+        {/* Top-right globe visual (with glow to increase visibility) */}
+        <div className="hidden md:block absolute right-0 top-0 translate-x-8 -translate-y-6 w-60 h-60 sm:w-72 sm:h-72 lg:w-96 lg:h-96 rounded-full bg-gradient-to-br from-cyan-400/25 via-fuchsia-400/10 to-indigo-500/20 blur-2xl pointer-events-none" />
+        <img
+          src={globe}
+          alt="Stylized globe"
+          className="hidden md:block absolute z-10 right-6 lg:right-10 top-10 lg:top-16 w-48 sm:w-60 lg:w-72 xl:w-80 drop-shadow-[0_25px_80px_rgba(99,102,241,0.45)] select-none pointer-events-none motion-safe:animate-float mix-blend-screen brightness-110 contrast-110 opacity-95"
+          draggable="false"
+        />
         <div className="mx-auto max-w-7xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">
