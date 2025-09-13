@@ -97,7 +97,7 @@ function App() {
         <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
           <p>{t('footer.copyright', { year: new Date().getFullYear() })}</p>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-slate-200 transition">{t('footer.privacy')}</a>
+            <a href="privacy.html" className="hover:text-slate-200 transition">{t('footer.privacy')}</a>
             <a href="#" className="hover:text-slate-200 transition">{t('footer.contact')}</a>
             <a href="https://github.com/" target="_blank" rel="noreferrer" className="hover:text-slate-200 transition">{t('footer.github')}</a>
           </div>
