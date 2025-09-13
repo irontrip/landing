@@ -1,12 +1,38 @@
-# React + Vite
+# Landing (Vite + React + Tailwind)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Local dev and build are handled by Vite.
 
-Currently, two official plugins are available:
+## Scripts
+- `npm run dev`: Start dev server
+- `npm run build`: Production build to `dist/`
+- `npm run preview`: Preview the built app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## GitHub Pages Deployment
+This repo is preconfigured to deploy the app to GitHub Pages via GitHub Actions.
 
-## Expanding the ESLint configuration
+### How it works
+- Workflow: `landing/.github/workflows/pages.yml`
+- Branch: `main` (on push) or manual run
+- Build dir: `dist`
+- Vite base: configured as `base: './'` in `landing/vite.config.js` so assets work under a project subpath
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### One-time setup
+1) Push this repository to GitHub.
+2) In GitHub → Settings → Pages, set Source to “GitHub Actions”.
+
+### Deploy
+1) Commit your changes to `main` and push.
+2) Wait for the “Deploy landing to GitHub Pages” workflow to finish.
+3) Find the live URL in the workflow’s “github-pages” environment or under Settings → Pages.
+
+### SPA routing on Pages
+The workflow copies `dist/index.html` to `dist/404.html`, which enables client‑side routing on GitHub Pages (deep links won’t 404).
+
+### Troubleshooting
+- Blank page or missing styles: ensure `base: './'` in `landing/vite.config.js`. If you prefer absolute paths, set `base: '/<REPO_NAME>/'`.
+- 404 on refresh: confirm `404.html` is present in the deployed artifact (the workflow creates it).
+- Build failures: use Node 18/20 on your local and workflow; delete `node_modules` and `package-lock.json`, then `npm ci` if needed.
+- Pages not updating: check Actions logs, confirm Pages is set to “GitHub Actions”, and that the workflow has `pages` + `id-token` permissions.
+
+## ESLint
+Type‑aware rules require TypeScript. For TS setup, see the Vite React TS template and `typescript-eslint` docs.
