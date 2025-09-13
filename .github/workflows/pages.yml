@@ -62,15 +62,6 @@ jobs:
         with:
           path: dist
 
-      - name: Deploy to gh-pages branch (branch method)
-        uses: peaceiris/actions-gh-pages@v3
-        if: always()
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
-          publish_branch: gh-pages
-          force_orphan: true
-
   deploy:
     environment:
       name: github-pages
