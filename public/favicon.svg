@@ -1,12 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Background badge to ensure visibility on light tabs -->
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Circular badge with brand gradient and a soft inner glow.
+       Keeps the white logo visible on both light and dark browser tabs. -->
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#1e293b"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4338CA"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
     </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect x="0" y="0" width="64" height="64" rx="12" fill="url(#g)"/>
+  <!-- Outer gradient circle -->
+  <circle cx="32" cy="32" r="28" fill="url(#bg)"/>
+  <!-- Subtle inner darkening to boost contrast for a white logo -->
+  <circle cx="32" cy="32" r="24" fill="#0B1022" fill-opacity="0.35"/>
+  <!-- Soft glow on top -->
+  <circle cx="32" cy="20" r="18" fill="url(#glow)"/>
+  <!-- Thin ring -->
+  <circle cx="32" cy="32" r="27" fill="none" stroke="#94A3B8" stroke-opacity="0.25" stroke-width="1"/>
   <!-- Center the existing white logo.png on top -->
-  <image href="logo.png" x="10" y="10" width="44" height="44" preserveAspectRatio="xMidYMid meet"/>
+  <image href="logo.png" x="14" y="14" width="36" height="36" preserveAspectRatio="xMidYMid meet"/>
 </svg>
