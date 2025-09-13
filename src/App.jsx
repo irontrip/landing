@@ -18,7 +18,10 @@ function App() {
       {/* Header */}
       <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/5 border-b border-white/10">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
-          <a href="#" className="font-semibold text-white tracking-tight text-lg">{t('brand')}</a>
+          <a href="#" className="flex items-center gap-3 font-semibold text-white tracking-tight text-lg">
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Irontrip logo" className="h-8 w-8 sm:h-10 sm:w-10 rounded" />
+            {t('brand')}
+          </a>
           <div className="flex items-center gap-2">
             <nav className="hidden sm:flex items-center gap-2">
               <a href="#waitlist" className="inline-flex items-center rounded-md border border-white/20 hover:border-white/40 px-4 py-2 text-sm font-medium text-white/90 transition">{t('hero.ctaWaitlist')}</a>
