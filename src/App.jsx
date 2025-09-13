@@ -66,10 +66,11 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Nomads */}
             <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] flex flex-col">
+              <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-cyan-400/25 via-fuchsia-400/10 to-indigo-500/20 blur-xl" />
               <img
                 src={`${import.meta.env.BASE_URL}icons/road.png`}
                 alt="Road icon"
-                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-60 drop-shadow-lg saturate-150 brightness-110"
+                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-85 drop-shadow-xl saturate-150 brightness-110 contrast-125"
                 draggable="false"
               />
               <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-indigo-500/10 via-fuchsia-500/5 to-cyan-500/10 pointer-events-none"></div>
@@ -84,10 +85,11 @@ function App() {
             </div>
             {/* Locals */}
             <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] flex flex-col">
+              <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-indigo-500/25 via-fuchsia-400/10 to-cyan-400/20 blur-xl" />
               <img
                 src={`${import.meta.env.BASE_URL}icons/kettlebell.png`}
                 alt="Kettlebell icon"
-                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-60 drop-shadow-lg saturate-150 brightness-110"
+                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-85 drop-shadow-xl saturate-150 brightness-110 contrast-125"
                 draggable="false"
               />
               <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-cyan-500/10 via-fuchsia-500/5 to-indigo-500/10 pointer-events-none"></div>
