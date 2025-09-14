@@ -20,6 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create Vite env file (.env.production)
+        run: |
+          echo "VITE_WEB3FORMS_ACCESS_KEY=${{ vars.VITE_WEB3FORMS_ACCESS_KEY }}" >> .env.production
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
