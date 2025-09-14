@@ -99,7 +99,7 @@ function ContactSection({ lang }) {
         'g-recaptcha-response': recaptchaToken,
          recaptcha_token: recaptchaToken,  
       }
-
+console.log("📌 reCAPTCHA token:", recaptchaToken)
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: {
