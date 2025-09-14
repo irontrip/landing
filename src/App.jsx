@@ -88,7 +88,7 @@ function ContactSection({ lang }) {
       }
 
       // Prefer proxy endpoint if provided (server-side verifies reCAPTCHA)
-      const endpoint = contactEndpoint || 'irontrip-recaptcha.irontrip-fit.workers.dev'
+      const endpoint = contactEndpoint || 'https://irontrip-recaptcha.irontrip-fit.workers.dev'
       const payload = contactEndpoint
         ? {
             token: recaptchaToken,
