@@ -237,10 +237,11 @@ function App() {
 
   const t = useMemo(() => (path, vars) => getText(translations, lang, path, vars), [lang])
 
-  // Ensure reCAPTCHA v3 script is present once per page if a site key exists
+  // Ensure reCAPTCHA v3 script is present once per page
   useEffect(() => {
-    if (!recaptchaSiteKey || typeof document === 'undefined') return
-    const src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`
+    if (typeof document === 'undefined') return
+    const renderParam = recaptchaSiteKey ? encodeURIComponent(recaptchaSiteKey) : 'explicit'
+    const src = `https://www.google.com/recaptcha/api.js?render=${renderParam}`
     const already = Array.from(document.scripts).some((s) => s.src.includes('/recaptcha/api.js'))
     if (!already) {
       const s = document.createElement('script')
