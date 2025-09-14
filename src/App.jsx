@@ -96,6 +96,7 @@ function ContactSection({ lang }) {
         name,
         email,
         message,
+        'g-recaptcha-response': recaptchaToken,
       }
 
       const res = await fetch(endpoint, {
