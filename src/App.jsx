@@ -90,6 +90,11 @@ function ContactSection({ lang }) {
         try {
           await new Promise((ready) => window.grecaptcha.ready(ready))
           recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: 'contact' })
+          // Lightweight debug (length only)
+          if (typeof window !== 'undefined' && process?.env?.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.log('reCAPTCHA token length:', recaptchaToken?.length || 0)
+          }
         } catch {}
       }
 
@@ -357,7 +362,7 @@ function App() {
                 type="button"
                 aria-label="Close"
                 onClick={() => setContactOpen(false)}
-                className="absolute right-3 top-3 rounded-md bg-white/10 hover:bg-white/20 text-white/80 p-1"
+                className="absolute right-3 top-3 z-20 rounded-md bg-white/10 hover:bg-white/20 text-white/80 p-1 pointer-events-auto"
               >
                 ✕
               </button>
