@@ -88,7 +88,8 @@ function ContactSection({ lang }) {
       }
 
       // Prefer proxy endpoint if provided (server-side verifies reCAPTCHA)
-      const endpoint = contactEndpoint || 'https://api.web3forms.com/submit'
+      const endpoint = contactEndpoint || '
+irontrip-recaptcha.irontrip-fit.workers.dev'
       const payload = contactEndpoint
         ? {
             token: recaptchaToken,
