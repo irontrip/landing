@@ -51,21 +51,7 @@ function ContactSection({ lang }) {
   const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
   const contactEndpoint = import.meta.env.VITE_CONTACT_ENDPOINT
 
-  // Load reCAPTCHA script on demand
-  useEffect(() => {
-    if (!recaptchaSiteKey || typeof document === 'undefined') return
-    const src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`
-    const already = Array.from(document.scripts).some((s) => s.src.includes('/recaptcha/api.js'))
-    if (!already) {
-      const s = document.createElement('script')
-      s.src = src
-      s.async = true
-      document.head.appendChild(s)
-      return () => {
-        // do not remove script to avoid thrashing if modal re-opens
-      }
-    }
-  }, [recaptchaSiteKey])
+  // reCAPTCHA script loading is handled at App level
 
   function validate() {
     const next = {}
@@ -90,11 +76,14 @@ function ContactSection({ lang }) {
         try {
           await new Promise((ready) => window.grecaptcha.ready(ready))
           recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: 'contact' })
-          // Lightweight debug (length only)
-          if (typeof window !== 'undefined' && process?.env?.NODE_ENV !== 'production') {
-            // eslint-disable-next-line no-console
-            console.log('reCAPTCHA token length:', recaptchaToken?.length || 0)
-          }
+          // Lightweight debug (length only) in non-production builds
+          try {
+            const mode = import.meta.env.MODE
+            if (typeof window !== 'undefined' && mode !== 'production') {
+              // eslint-disable-next-line no-console
+              console.log('reCAPTCHA token length:', recaptchaToken?.length || 0)
+            }
+          } catch {}
         } catch {}
       }
 
@@ -237,6 +226,7 @@ function ContactSection({ lang }) {
 function App() {
   const [lang, setLang] = useState(detectInitialLang())
   const [contactOpen, setContactOpen] = useState(false)
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
 
   useEffect(() => {
     try { localStorage.setItem('lang', lang) } catch {}
@@ -246,6 +236,20 @@ function App() {
   }, [lang])
 
   const t = useMemo(() => (path, vars) => getText(translations, lang, path, vars), [lang])
+
+  // Ensure reCAPTCHA v3 script is present once per page if a site key exists
+  useEffect(() => {
+    if (!recaptchaSiteKey || typeof document === 'undefined') return
+    const src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`
+    const already = Array.from(document.scripts).some((s) => s.src.includes('/recaptcha/api.js'))
+    if (!already) {
+      const s = document.createElement('script')
+      s.src = src
+      s.async = true
+      s.defer = true
+      document.head.appendChild(s)
+    }
+  }, [recaptchaSiteKey])
 
   useEffect(() => {
     if (typeof document === 'undefined') return
