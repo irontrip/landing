@@ -100,7 +100,7 @@ function ContactSection({ lang }) {
     <section id="contact" className="relative mt-2 sm:mt-4">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10">
-          <h2 className="text-2xl font-semibold text-white">{L.title}</h2>
+          <h2 id="contact-title" className="text-2xl font-semibold text-white">{L.title}</h2>
           <p className="mt-2 text-slate-300">{L.subtitle}</p>
 
           {success ? (
@@ -133,6 +133,7 @@ function ContactSection({ lang }) {
                   className="w-full rounded-md border border-white/15 bg-white/10 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
                   aria-invalid={errors.name ? 'true' : 'false'}
                   aria-describedby={errors.name ? 'name-error' : undefined}
+                  autoFocus
                 />
                 {errors.name && (
                   <p id="name-error" className="mt-1 text-xs text-rose-300">{errors.name}</p>
@@ -190,6 +191,7 @@ function ContactSection({ lang }) {
 
 function App() {
   const [lang, setLang] = useState(detectInitialLang())
+  const [contactOpen, setContactOpen] = useState(false)
 
   useEffect(() => {
     try { localStorage.setItem('lang', lang) } catch {}
@@ -199,6 +201,20 @@ function App() {
   }, [lang])
 
   const t = useMemo(() => (path, vars) => getText(translations, lang, path, vars), [lang])
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    if (contactOpen) {
+      const prev = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      const onKey = (e) => { if (e.key === 'Escape') setContactOpen(false) }
+      window.addEventListener('keydown', onKey)
+      return () => {
+        document.body.style.overflow = prev
+        window.removeEventListener('keydown', onKey)
+      }
+    }
+  }, [contactOpen])
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -291,8 +307,25 @@ function App() {
         </div>
       </section>
 
-      {/* Contact */}
-      <ContactSection lang={lang} />
+      {/* Contact Modal */}
+      {contactOpen && (
+        <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setContactOpen(false)}></div>
+          <div role="dialog" aria-modal="true" aria-labelledby="contact-title" className="relative z-10 w-full max-w-3xl px-4 sm:px-6 py-8">
+            <div className="relative rounded-2xl border border-white/10 bg-slate-900/95 backdrop-blur">
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={() => setContactOpen(false)}
+                className="absolute right-3 top-3 rounded-md bg-white/10 hover:bg-white/20 text-white/80 p-1"
+              >
+                ✕
+              </button>
+              <ContactSection lang={lang} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-white/10">
@@ -300,7 +333,9 @@ function App() {
           <p>{t('footer.copyright', { year: new Date().getFullYear() })}</p>
           <div className="flex items-center gap-4">
             <a href="privacy.html" className="hover:text-slate-200 transition">{t('footer.privacy')}</a>
-            <a href="#contact" className="hover:text-slate-200 transition">{t('footer.contact')}</a>
+            <button type="button" onClick={() => setContactOpen(true)} className="hover:text-slate-200 transition">
+              {t('footer.contact')}
+            </button>
             <a href="https://github.com/" target="_blank" rel="noreferrer" className="hover:text-slate-200 transition">{t('footer.github')}</a>
           </div>
         </div>
