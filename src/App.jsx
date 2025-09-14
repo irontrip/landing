@@ -48,6 +48,24 @@ function ContactSection({ lang }) {
   const [botField, setBotField] = useState('')
 
   const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+  const contactEndpoint = import.meta.env.VITE_CONTACT_ENDPOINT
+
+  // Load reCAPTCHA script on demand
+  useEffect(() => {
+    if (!recaptchaSiteKey || typeof document === 'undefined') return
+    const src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`
+    const already = Array.from(document.scripts).some((s) => s.src.includes('/recaptcha/api.js'))
+    if (!already) {
+      const s = document.createElement('script')
+      s.src = src
+      s.async = true
+      document.head.appendChild(s)
+      return () => {
+        // do not remove script to avoid thrashing if modal re-opens
+      }
+    }
+  }, [recaptchaSiteKey])
 
   function validate() {
     const next = {}
@@ -67,18 +85,40 @@ function ContactSection({ lang }) {
     setServerMsg('')
     await new Promise((r) => setTimeout(r, 400))
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      let recaptchaToken = ''
+      if (recaptchaSiteKey && window.grecaptcha && window.grecaptcha.execute) {
+        try {
+          await new Promise((ready) => window.grecaptcha.ready(ready))
+          recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: 'contact' })
+        } catch {}
+      }
+
+      // Prefer proxy endpoint if provided (server-side verifies reCAPTCHA)
+      const endpoint = contactEndpoint || 'https://api.web3forms.com/submit'
+      const payload = contactEndpoint
+        ? {
+            token: recaptchaToken,
+            name,
+            email,
+            message,
+          }
+        : {
+            access_key: accessKey || 'MISSING-ACCESS-KEY',
+            name,
+            email,
+            message,
+            subject: 'Irontrip Contact',
+            from_name: 'Irontrip Landing',
+            botcheck: botField,
+            // For services that accept it, include common captcha fields
+            'g-recaptcha-response': recaptchaToken,
+            recaptcha_token: recaptchaToken,
+          }
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key: accessKey || 'MISSING-ACCESS-KEY',
-          name,
-          email,
-          message,
-          subject: 'Irontrip Contact',
-          from_name: 'Irontrip Landing',
-          botcheck: botField,
-        }),
+        body: JSON.stringify(payload),
       })
       const data = await res.json().catch(() => ({}))
       if (res.ok && data.success) {

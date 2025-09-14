@@ -1,0 +1,9 @@
+name = "irontrip-contact-proxy"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Set these via `wrangler secret put` for security
+# RECAPTCHA_SECRET_KEY = "..."
+# WEB3FORMS_ACCESS_KEY = "..."
+
