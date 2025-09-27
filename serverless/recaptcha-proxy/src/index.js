@@ -112,9 +112,17 @@ export default {
     }
 
     // Forward verified payload to Web3Forms
+    const web3Headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    }
+    if (originAllowed && origin) {
+      web3Headers.Origin = origin
+    }
+
     const web3Response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers: web3Headers,
       body: JSON.stringify({
         access_key: accessKey,
         name,
