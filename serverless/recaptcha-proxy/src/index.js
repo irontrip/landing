@@ -133,9 +133,15 @@ export default {
       }),
     })
 
-    const web3Data = await web3Response.json().catch(() => ({}))
+    const web3Raw = await web3Response.text().catch(() => '')
+    let web3Data
+    try {
+      web3Data = JSON.parse(web3Raw)
+    } catch {
+      web3Data = null
+    }
 
-    if (web3Response.ok && web3Data.success) {
+    if (web3Response.ok && web3Data?.success) {
       return json(
         { success: true, message: 'Form submitted successfully.' },
         200,
@@ -146,8 +152,10 @@ export default {
     return json(
       {
         success: false,
-        message: web3Data.message || 'Web3Forms error',
-        details: web3Data,
+        message:
+          (web3Data && (web3Data.message || web3Data?.error)) ||
+          (web3Raw || 'Web3Forms error'),
+        details: web3Data ?? { raw: web3Raw },
       },
       web3Response.status || 502,
       corsOrigin,
