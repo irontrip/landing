@@ -13,9 +13,9 @@ Deploy (Cloudflare Workers)
 3) Deploy: wrangler deploy
 
 Environment variables
-- RECAPTCHA_SECRET_KEY: Your reCAPTCHA secret key
-- WEB3FORMS_ACCESS_KEY: Your Web3Forms access key
+- RECAPTCHA_SECRET: reCAPTCHA v3 secret key (fallback: `RECAPTCHA_SECRET_KEY`)
+- W3FORM_ID: Web3Forms access key / form ID (fallback: `WEB3FORMS_ACCESS_KEY`)
+- ALLOWED_ORIGIN: Origin allowed to call the worker (e.g. `https://irontrip.github.io`)
 
 Endpoint
 - After deploy, set VITE_CONTACT_ENDPOINT in landing/.env (or repo vars for CI) to the Worker URL.
-
