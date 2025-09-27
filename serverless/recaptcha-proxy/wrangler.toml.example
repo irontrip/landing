@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2025-01-01"
 
 [vars]
-# Set these via `wrangler secret put` for security
+# Set these via  for security
 # RECAPTCHA_SECRET = "..."
 # W3FORM_ID = "..."
 # ALLOWED_ORIGIN = "https://irontrip.github.io"

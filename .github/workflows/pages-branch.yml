@@ -31,8 +31,8 @@ jobs:
         run: |
           echo "VITE_WEB3FORMS_ACCESS_KEY=${{ vars.VITE_WEB3FORMS_ACCESS_KEY }}" >> .env.production
           # Prefer VITE_RECAPTCHA_SITE_KEY if set; otherwise fallback to RECAPTCHA_PUBLIC_KEY
-          echo "VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY:-$RECAPTCHA_PUBLIC_KEY}" >> .env.production
-          echo "VITE_CONTACT_ENDPOINT=${{ vars.VITE_CONTACT_ENDPOINT }}" >> .env.production
+          echo "VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY:-${RECAPTCHA_PUBLIC_KEY:-6Lf75tYrAAAAABny5-0q-OmGaEJPsfmDSApgKzug}}" >> .env.production
+          echo "VITE_CONTACT_ENDPOINT=${VITE_CONTACT_ENDPOINT:-https://irontrip-form-recaptcha-proxy.irontrip-fit.workers.dev}" >> .env.production
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
