@@ -4,6 +4,6 @@ compatibility_date = "2025-01-01"
 
 [vars]
 # Set these via `wrangler secret put` for security
-# RECAPTCHA_SECRET_KEY = "..."
-# WEB3FORMS_ACCESS_KEY = "..."
-
+# RECAPTCHA_SECRET = "..."
+# W3FORM_ID = "..."
+# ALLOWED_ORIGIN = "https://irontrip.github.io"
