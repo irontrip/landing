@@ -4,7 +4,10 @@ on:
   pull_request:
     branches: [ dev ]
   push:
-    branches: [ main, dev ]
+    branches:
+      - main
+      - dev
+      - fix/**
 
 permissions:
   contents: write
@@ -85,6 +88,36 @@ jobs:
         run: |
           pr='${{ github.event.pull_request.number }}'
           gh api repos/${{ github.repository }}/issues/${pr}/comments -f body="🚀 Preview deployed: ${PREVIEW_URL}"
+
+  preview_branch:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/fix/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      - name: Compute branch slug
+        id: slug
+        run: |
+          slug="${GITHUB_REF_NAME//\//-}" # replace slashes with dashes for folder name
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+
+      - name: Publish branch preview to gh-pages/branches/<slug>/
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          publish_branch: gh-pages
+          destination_dir: branches/${{ steps.slug.outputs.slug }}
+          keep_files: true
+
+      - name: Announce preview URL in summary
+        run: |
+          echo "Preview URL: https://irontrip.github.io/landing/branches/${{ steps.slug.outputs.slug }}/" >> "$GITHUB_STEP_SUMMARY"
 
   production:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
