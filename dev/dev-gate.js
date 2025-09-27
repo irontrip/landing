@@ -8,7 +8,7 @@
     var KEY = 'irontrip_dev_access_v1';
     if (localStorage.getItem(KEY) === 'granted') return;
 
-    var expectedHex = 'e38f33a10b2e27340ac3f7026c1d6d723852bd7ff6b7da579107a7d02a18edcd'; // SHA-256 of provided passphrase
+    var expectedHex = 'b662b3bec89022f0a1a78fc497842bd4197cd34aa642d2567041f05ae4b07fc3'; // SHA-256 of provided passphrase
 
     async function sha256Hex(text){
       const enc = new TextEncoder();
@@ -34,4 +34,3 @@
       '</main></body>';
   } catch(e){ console.warn('dev-gate error', e); }
 })();
-
