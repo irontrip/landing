@@ -92,6 +92,7 @@ function ContactSection({ lang }) {
       const payload = contactEndpoint
         ? {
             token: recaptchaToken,
+            formId: 'contact',
             name,
             email,
             message,
