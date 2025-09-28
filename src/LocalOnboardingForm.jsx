@@ -90,6 +90,7 @@ const STRINGS = {
 }
 
 const FORM_ID = 'local-onboarding'
+const RECAPTCHA_ACTION = 'local_onboarding'
 const TOTAL_STEPS = 4
 
 const INITIAL_VALUES = {
@@ -191,7 +192,7 @@ function LocalOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
       let recaptchaToken = ''
       if (recaptchaSiteKey && window.grecaptcha?.execute) {
         await new Promise((ready) => window.grecaptcha.ready(ready))
-        recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: FORM_ID })
+        recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: RECAPTCHA_ACTION })
       }
 
       const payload = {
