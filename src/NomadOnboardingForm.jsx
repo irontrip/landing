@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import LocationAutocomplete from './LocationAutocomplete'
+import PhoneInput from './PhoneInput'
 
 const STRINGS = {
   en: {
@@ -41,6 +42,7 @@ const STRINGS = {
     },
     required: 'This field is required',
     invalidEmail: 'Please enter a valid email address',
+    invalidPhone: 'Please enter a valid phone number',
     noEndpoint: 'Nomad onboarding is not available yet. Please try again later.',
     successTitle: 'Application sent!',
     successBody:
@@ -85,6 +87,7 @@ const STRINGS = {
     },
     required: 'Este campo es obligatorio',
     invalidEmail: 'Introduce un correo válido',
+    invalidPhone: 'Introduce un número de teléfono válido',
     noEndpoint: 'El onboarding para nómadas aún no está disponible. Intenta más tarde.',
     successTitle: '¡Solicitud enviada!',
     successBody:
@@ -100,6 +103,10 @@ const INITIAL_VALUES = {
   fullName: '',
   email: '',
   phone: '',
+  phoneCountry: '',
+  phoneDialCode: '',
+  phoneNational: '',
+  phoneValid: false,
   location: '',
   locationDetails: null,
   locationReview: '',
@@ -139,6 +146,18 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
     setErrors((prev) => ({ ...prev, [field]: undefined }))
   }
 
+  function handlePhoneChange(next) {
+    setValues((prev) => ({
+      ...prev,
+      phone: next.e164,
+      phoneCountry: next.country,
+      phoneDialCode: next.dialCode,
+      phoneNational: next.national,
+      phoneValid: next.isValid,
+    }))
+    setErrors((prev) => ({ ...prev, phone: undefined }))
+  }
+
   function toggleInArray(field, option) {
     setValues((prev) => {
       const set = new Set(prev[field])
@@ -160,6 +179,7 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
       if (!values.email.trim()) nextErrors.email = L.required
       else if (!validateEmail(values.email.trim())) nextErrors.email = L.invalidEmail
       if (!values.location.trim()) nextErrors.location = L.required
+      if (values.phoneNational && !values.phoneValid) nextErrors.phone = L.invalidPhone
     } else if (currentStep === 1) {
       if (!values.trainingTools.length) nextErrors.trainingTools = L.required
       if (!values.experience) nextErrors.experience = L.required
@@ -233,6 +253,10 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
         fullName: values.fullName,
         email: values.email,
         phone: values.phone,
+        phoneCountry: values.phoneCountry,
+        phoneDialCode: values.phoneDialCode,
+        phoneNational: values.phoneNational,
+        phoneValid: values.phoneNational ? String(values.phoneValid) : '',
         location: values.location,
         locationDetails: values.locationDetails ? JSON.stringify(values.locationDetails) : '',
         locationReview: values.locationReview,
@@ -345,15 +369,17 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
                   <p className="mt-1 text-xs text-rose-300">{errors.email}</p>
                 )}
               </div>
-              <div>
-                <label className="block text-sm text-slate-300 mb-1">{L.fields.phone}</label>
-                <input
-                  type="tel"
-                  value={values.phone}
-                  onChange={(event) => updateValue('phone', event.target.value)}
-                  className="w-full rounded-md border border-white/15 bg-white/10 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-                />
-              </div>
+              <PhoneInput
+                lang={lang}
+                label={L.fields.phone}
+                value={{
+                  country: values.phoneCountry,
+                  national: values.phoneNational,
+                  e164: values.phone,
+                }}
+                onChange={handlePhoneChange}
+                error={errors.phone}
+              />
               <LocationAutocomplete
                 lang={lang}
                 label={L.fields.location}
