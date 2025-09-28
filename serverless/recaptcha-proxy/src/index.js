@@ -132,11 +132,13 @@ export default {
       headers: web3Headers,
       body: JSON.stringify({
         access_key: accessKey,
+        from: email,
+        from_name: name,
+        replyto: email,
+        subject: 'Irontrip Contact',
         name,
         email,
         message,
-        subject: 'Irontrip Contact',
-        from_name: 'Irontrip Landing',
       }),
     })
 
