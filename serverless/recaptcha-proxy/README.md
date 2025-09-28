@@ -5,7 +5,7 @@ Overview
 - Keeps your reCAPTCHA secret and Web3Forms access key off the client.
 
 Inputs
-- POST JSON: { token, name, email, message }
+- POST JSON: { token, formId, name, email, message, ...custom }
 
 Deploy (Cloudflare Workers)
 1) Install Wrangler: npm i -g wrangler
@@ -14,7 +14,8 @@ Deploy (Cloudflare Workers)
 
 Environment variables
 - RECAPTCHA_SECRET: reCAPTCHA v3 secret key (fallback: `RECAPTCHA_SECRET_KEY`)
-- FORM_ENDPOINT: URL that receives the verified payload (defaults to `https://formspree.io/f/xblzderv`)
+- FORMSPREE_MAP: JSON map of formId → Formspree endpoint (e.g. `{ "contact": "https://formspree.io/f/xblzderv" }`)
+- FORM_ENDPOINT / FORM_ENDPOINT_URL: Optional single-endpoint fallback if the map is not provided
 - ALLOWED_ORIGIN: Origin allowed to call the worker (e.g. `https://irontrip.github.io`)
 
 Endpoint

@@ -7,6 +7,7 @@ export default {
       RECAPTCHA_SECRET_KEY,
       FORM_ENDPOINT,
       FORM_ENDPOINT_URL,
+      FORMSPREE_MAP,
       ALLOWED_ORIGIN = '',
     } = env
 
@@ -62,8 +63,22 @@ export default {
       )
     }
 
-    const { token, name, email, message } = body ?? {}
-    if (!token || !name || !email || !message) {
+    const { token, formId, ...rest } = body ?? {}
+    if (!token || !formId) {
+      return json(
+        { success: false, message: 'Missing required fields' },
+        400,
+        corsOrigin,
+      )
+    }
+
+    const { name, email, message } = {
+      name: rest.name,
+      email: rest.email,
+      message: rest.message,
+    }
+
+    if (!name || !email || !message) {
       return json(
         { success: false, message: 'Missing required fields' },
         400,
@@ -111,18 +126,35 @@ export default {
       forwardHeaders.Origin = origin
     }
 
-    const formEndpoint = FORM_ENDPOINT || FORM_ENDPOINT_URL || 'https://formspree.io/f/xblzderv'
+    const formEndpoint = resolveFormEndpoint(
+      {
+        FORM_ENDPOINT,
+        FORM_ENDPOINT_URL,
+        FORMSPREE_MAP,
+      },
+      formId,
+    )
+
+    if (!formEndpoint) {
+      return json(
+        { success: false, message: `Unknown formId: ${formId}` },
+        400,
+        corsOrigin,
+      )
+    }
 
     const forwardResponse = await fetch(formEndpoint, {
       method: 'POST',
       headers: forwardHeaders,
       body: JSON.stringify({
+        ...rest,
         name,
         email,
         message,
-        from: email,
-        replyto: email,
-        subject: 'Irontrip Contact',
+        formId,
+        from: rest.from || email,
+        replyto: rest.replyto || email,
+        subject: rest.subject || 'Irontrip Contact',
       }),
     })
 
@@ -187,4 +219,33 @@ function parseAllowedOrigins(raw) {
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean)
+}
+
+let cachedMapString = null
+let cachedMap = null
+
+function resolveFormEndpoint(envMap, formId) {
+  if (!formId) return null
+
+  const single = envMap.FORM_ENDPOINT || envMap.FORM_ENDPOINT_URL
+  if (!envMap.FORMSPREE_MAP) {
+    // Fallback to single endpoint behaviour
+    return single || null
+  }
+
+  if (envMap.FORMSPREE_MAP !== cachedMapString) {
+    try {
+      cachedMap = JSON.parse(envMap.FORMSPREE_MAP)
+      cachedMapString = envMap.FORMSPREE_MAP
+    } catch {
+      cachedMap = null
+      cachedMapString = envMap.FORMSPREE_MAP
+    }
+  }
+
+  if (cachedMap && typeof cachedMap === 'object') {
+    return cachedMap[formId] || null
+  }
+
+  return single || null
 }
