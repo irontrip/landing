@@ -92,6 +92,7 @@ const STRINGS = {
 }
 
 const FORM_ID = 'nomad-onboarding'
+const RECAPTCHA_ACTION = 'nomad_onboarding'
 const TOTAL_STEPS = 4
 
 const INITIAL_VALUES = {
@@ -191,12 +192,31 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
       let recaptchaToken = ''
       if (recaptchaSiteKey && window.grecaptcha?.execute) {
         await new Promise((ready) => window.grecaptcha.ready(ready))
-        recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: FORM_ID })
+        recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: RECAPTCHA_ACTION })
       }
+
+      const messageSummary = [
+        `Name: ${values.fullName}`,
+        `Email: ${values.email}`,
+        `Phone: ${values.phone || 'N/A'}`,
+        `Location: ${values.location}`,
+        `Preferred tools: ${values.trainingTools.join(', ') || 'N/A'}`,
+        `Experience level: ${values.experience}`,
+        `Training style: ${values.trainingStyle}`,
+        `Nomad type: ${values.nomadType}`,
+        `Travel pace: ${values.travelPace}`,
+        `Languages: ${values.languages}`,
+        `Open to training: ${values.openToTraining}`,
+        `Connection preferences: ${values.connectionPrefs.join(', ') || 'N/A'}`,
+        values.notes ? `Notes: ${values.notes}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n')
 
       const payload = {
         token: recaptchaToken,
         formId: FORM_ID,
+        name: values.fullName,
         fullName: values.fullName,
         email: values.email,
         phone: values.phone,
@@ -213,6 +233,7 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
         from: values.email,
         replyto: values.email,
         subject: 'Nomad onboarding',
+        message: messageSummary,
       }
 
       const response = await fetch(endpoint, {

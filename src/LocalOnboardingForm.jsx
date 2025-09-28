@@ -90,6 +90,7 @@ const STRINGS = {
 }
 
 const FORM_ID = 'local-onboarding'
+const RECAPTCHA_ACTION = 'local_onboarding'
 const TOTAL_STEPS = 4
 
 const INITIAL_VALUES = {
@@ -191,12 +192,31 @@ function LocalOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
       let recaptchaToken = ''
       if (recaptchaSiteKey && window.grecaptcha?.execute) {
         await new Promise((ready) => window.grecaptcha.ready(ready))
-        recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: FORM_ID })
+        recaptchaToken = await window.grecaptcha.execute(recaptchaSiteKey, { action: RECAPTCHA_ACTION })
       }
+
+      const messageSummary = [
+        `Name: ${values.fullName}`,
+        `Email: ${values.email}`,
+        `Phone: ${values.phone || 'N/A'}`,
+        `Location: ${values.location}`,
+        `Equipment: ${values.equipment.join(', ') || 'N/A'}`,
+        values.equipmentOther ? `Other equipment: ${values.equipmentOther}` : '',
+        `Condition: ${values.condition}`,
+        `Access: ${values.access}`,
+        `Open to training: ${values.openToTraining}`,
+        `Connection preferences: ${values.connectionPrefs.join(', ') || 'N/A'}`,
+        `Languages: ${values.languages}`,
+        `Availability: ${values.availability}`,
+        `Requirements: ${values.requirements}`,
+      ]
+        .filter(Boolean)
+        .join('\n')
 
       const payload = {
         token: recaptchaToken,
         formId: FORM_ID,
+        name: values.fullName,
         fullName: values.fullName,
         email: values.email,
         phone: values.phone,
@@ -213,6 +233,7 @@ function LocalOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
         from: values.email,
         replyto: values.email,
         subject: 'Local onboarding',
+        message: messageSummary,
       }
 
       const response = await fetch(endpoint, {
