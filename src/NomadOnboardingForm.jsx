@@ -6,6 +6,7 @@ const STRINGS = {
   en: {
     title: 'Join Irontrip as a Nomad',
     subtitle: 'Tell us how you travel and train so we can match you with the right locals and gear.',
+    subtitleStep4: 'Tell us how you want to connect to the locals.',
     step: (current, total) => `Step ${current} of ${total}`,
     sections: ['Essentials', 'Fitness profile', 'Travel context', 'Community'],
     fields: {
@@ -24,7 +25,7 @@ const STRINGS = {
       notes: 'Anything else we should know? (optional)',
     },
     options: {
-      trainingTools: ['Sandbag', 'Macebell', 'Clubbell', 'Bodyweight', 'Open to anything'],
+      trainingTools: ['Sandbag', 'Macebell', 'Clubbell', 'Dumbbells', 'Open to anything'],
       experience: ['Beginner', 'Intermediate', 'Advanced'],
       trainingStyle: ['Strength', 'Conditioning', 'Endurance', 'Mixed'],
       nomadType: ['Solo', 'With partner', 'With family'],
@@ -51,6 +52,7 @@ const STRINGS = {
   es: {
     title: 'Únete a Irontrip como Nómada',
     subtitle: 'Cuéntanos cómo viajas y entrenas para conectarte con los locales y el equipamiento adecuados.',
+    subtitleStep4: 'Cuéntanos cómo quieres conectar con las personas locales.',
     step: (current, total) => `Paso ${current} de ${total}`,
     sections: ['Esenciales', 'Perfil de entrenamiento', 'Contexto de viaje', 'Comunidad'],
     fields: {
@@ -69,7 +71,7 @@ const STRINGS = {
       notes: '¿Algo más que debamos saber? (opcional)',
     },
     options: {
-      trainingTools: ['Sac de arena', 'Mazo (macebell)', 'Clubbell', 'Peso corporal', 'Abierto a todo'],
+      trainingTools: ['Saco de arena', 'Mazo (macebell)', 'Clubbell', 'Dumbbells', 'Abierto a todo'],
       experience: ['Principiante', 'Intermedio', 'Avanzado'],
       trainingStyle: ['Fuerza', 'Condicionamiento', 'Resistencia', 'Mixto'],
       nomadType: ['Solo', 'Con pareja', 'Con familia'],
@@ -296,6 +298,7 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
   }
 
   const sectionTitle = `${L.step(step + 1, TOTAL_STEPS)} · ${L.sections[step]}`
+  const activeSubtitle = step === TOTAL_STEPS - 1 && L.subtitleStep4 ? L.subtitleStep4 : L.subtitle
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 px-4 py-6 sm:px-6 sm:py-8">
@@ -303,7 +306,7 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
         <div>
           <p className="text-xs uppercase tracking-widest text-indigo-300/80">{sectionTitle}</p>
           <h2 className="mt-1 text-2xl font-semibold text-white">{L.title}</h2>
-          <p className="mt-2 text-sm text-slate-300">{L.subtitle}</p>
+          <p className="mt-2 text-sm text-slate-300">{activeSubtitle}</p>
         </div>
         <button
           type="button"
