@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 /* Optional: smooth font rendering across OSes */
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 /* Base body reset; layout handled in components via Tailwind */
 body { margin: 0; }
