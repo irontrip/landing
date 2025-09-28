@@ -13,6 +13,7 @@ export const translations = {
       sub: 'Irontrip helps nomads keep their training rituals alive anywhere — and gives locals a way to share their gear, connect, and build community.',
       ctaWaitlist: '👉 Join Waitlist',
       ctaLend: '👉 Share Your Gear',
+      ctaNomadOnboarding: 'Start Nomad onboarding',
     },
     value: {
       nomadsTitle: 'For Nomads',
@@ -40,6 +41,7 @@ export const translations = {
       sub: 'Irontrip ayuda a nómadas a mantener sus rituales de entrenamiento en cualquier lugar — y ofrece a locales una forma de compartir su equipo, conectar y construir comunidad.',
       ctaWaitlist: '👉 Únete a la lista de espera',
       ctaLend: '👉 Comparte tu equipo',
+      ctaNomadOnboarding: 'Inicia onboarding para nómadas',
     },
     value: {
       nomadsTitle: 'Para Nómadas',

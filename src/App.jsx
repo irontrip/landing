@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo } from 'react'
 import { translations, getText, availableLangs, detectInitialLang } from './i18n'
+import NomadOnboardingForm from './NomadOnboardingForm'
 
-function ContactSection({ lang }) {
+function ContactSection({ lang, endpoint }) {
   const dict = {
     en: {
       title: 'Contact Us',
@@ -49,7 +50,7 @@ function ContactSection({ lang }) {
 
   const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
   const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
-  const contactEndpoint = import.meta.env.VITE_CONTACT_ENDPOINT
+  const contactEndpoint = endpoint || import.meta.env.VITE_CONTACT_ENDPOINT
 
   // reCAPTCHA script loading is handled at App level
 
@@ -80,11 +81,14 @@ function ContactSection({ lang }) {
           try {
             const mode = import.meta.env.MODE
             if (typeof window !== 'undefined' && mode !== 'production') {
-              // eslint-disable-next-line no-console
               console.log('reCAPTCHA token length:', recaptchaToken?.length || 0)
             }
-          } catch {}
-        } catch {}
+          } catch {
+            /* ignore token length debug errors */
+          }
+        } catch {
+          /* ignore reCAPTCHA execution errors */
+        }
       }
 
       // Prefer proxy endpoint if provided (server-side verifies reCAPTCHA)
@@ -227,10 +231,15 @@ function ContactSection({ lang }) {
 function App() {
   const [lang, setLang] = useState(detectInitialLang())
   const [contactOpen, setContactOpen] = useState(false)
+  const [nomadFormOpen, setNomadFormOpen] = useState(false)
   const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+  const contactEndpoint = import.meta.env.VITE_CONTACT_ENDPOINT
 
   useEffect(() => {
-    try { localStorage.setItem('lang', lang) } catch {}
+    try { localStorage.setItem('lang', lang) }
+    catch {
+      /* ignore storage errors */
+    }
     if (typeof document !== 'undefined') {
       document.documentElement.lang = lang
     }
@@ -254,17 +263,26 @@ function App() {
 
   useEffect(() => {
     if (typeof document === 'undefined') return
-    if (contactOpen) {
-      const prev = document.body.style.overflow
+    const shouldLock = contactOpen || nomadFormOpen
+    const prev = document.body.style.overflow
+    if (shouldLock) {
       document.body.style.overflow = 'hidden'
-      const onKey = (e) => { if (e.key === 'Escape') setContactOpen(false) }
+      const onKey = (event) => {
+        if (event.key === 'Escape') {
+          setContactOpen(false)
+          setNomadFormOpen(false)
+        }
+      }
       window.addEventListener('keydown', onKey)
       return () => {
         document.body.style.overflow = prev
         window.removeEventListener('keydown', onKey)
       }
     }
-  }, [contactOpen])
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [contactOpen, nomadFormOpen])
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -330,9 +348,13 @@ function App() {
               <p className="mt-2 text-2xl font-bold text-slate-100">{t('value.nomadsHeadline')}</p>
               <p className="mt-4 text-slate-300 leading-relaxed">{t('value.nomadsBody')}</p>
               <div className="mt-auto pt-6">
-                <a id="waitlist" href="#" className="inline-flex items-center rounded-lg bg-indigo-500 hover:bg-indigo-400 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition">
+                <button
+                  type="button"
+                  onClick={() => setNomadFormOpen(true)}
+                  className="inline-flex items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-400"
+                >
                   {t('hero.ctaWaitlist')}
-                </a>
+                </button>
               </div>
             </div>
             {/* Locals */}
@@ -357,6 +379,20 @@ function App() {
         </div>
       </section>
 
+      {nomadFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setNomadFormOpen(false)}></div>
+          <div role="dialog" aria-modal="true" className="relative z-10 w-full max-w-4xl px-4 sm:px-6 py-8">
+            <NomadOnboardingForm
+              lang={lang}
+              recaptchaSiteKey={recaptchaSiteKey}
+              endpoint={contactEndpoint}
+              onClose={() => setNomadFormOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Contact Modal */}
       {contactOpen && (
         <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center">
@@ -371,7 +407,7 @@ function App() {
               >
                 ✕
               </button>
-              <ContactSection lang={lang} />
+              <ContactSection lang={lang} endpoint={contactEndpoint} />
             </div>
           </div>
         </div>
