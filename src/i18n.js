@@ -17,13 +17,13 @@ export const translations = {
     },
     value: {
       nomadsTitle: 'For Nomads',
-      nomadsHeadline: 'Access your training, anywhere.',
+      nomadsHeadline: 'Fitness that travels with you.',
       nomadsBody:
-        'Stay consistent on the road. Irontrip connects you to simple tools and portable rituals that fit your lifestyle, so you never lose your rhythm.',
+        'Irontrip helps nomads stay consistent with their training anywhere in the world. Lightweight rituals, simple tools, and access to local hosts mean your rhythm never breaks — whether you’re in a city park, a mountain trail, or a friend’s living room.',
       localsTitle: 'For Locals',
-      localsHeadline: 'Your gear, their journey.',
+      localsHeadline: 'Your gear. Their journey.',
       localsBody:
-        'Share your equipment, meet like‑minded people, and spark connections rooted in movement and resilience. Build community while empowering nomads.',
+        'As a local, you can share your kettlebell, sandbag, macebell, or other tools with nomads passing through. It’s not just about lending equipment — it’s about connection. Meet like-minded people, spark conversations, and build a community rooted in movement and resilience.',
     },
     footer: {
       privacy: 'Privacy',
@@ -45,13 +45,13 @@ export const translations = {
     },
     value: {
       nomadsTitle: 'Para Nómadas',
-      nomadsHeadline: 'Accede a tu entrenamiento, donde sea.',
+      nomadsHeadline: 'Fitness que viaja contigo.',
       nomadsBody:
-        'Mantén la constancia en el camino. Irontrip te conecta con herramientas simples y rituales portátiles que se ajustan a tu estilo de vida, para que no pierdas el ritmo.',
+        'Irontrip ayuda a las personas nómadas a mantenerse constantes con su entrenamiento en cualquier lugar del mundo. Rituales ligeros, herramientas sencillas y acceso a anfitriones locales mantienen tu ritmo, ya sea en un parque urbano, un sendero de montaña o la sala de una amistad.',
       localsTitle: 'Para Locales',
-      localsHeadline: 'Tu equipo, su viaje.',
+      localsHeadline: 'Tu equipo. Su travesía.',
       localsBody:
-        'Comparte tu equipamiento, conoce a personas afines y crea conexiones basadas en el movimiento y la resiliencia. Construye comunidad mientras apoyas a nómadas.',
+        'Como local, puedes compartir tu kettlebell, sandbag, macebell u otras herramientas con nómadas de paso. No se trata solo de prestar equipo — se trata de conexión. Conoce a personas afines, enciende conversaciones y construye una comunidad basada en el movimiento y la resiliencia.',
     },
     footer: {
       privacy: 'Privacidad',
