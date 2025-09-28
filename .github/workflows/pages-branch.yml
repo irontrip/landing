@@ -4,7 +4,10 @@ on:
   pull_request:
     branches: [ dev ]
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - dev
+      - fix/**
 
 permissions:
   contents: write
@@ -13,9 +16,23 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Provide Vite build-time public key for Web3Forms from repo variables
+      VITE_WEB3FORMS_ACCESS_KEY: ${{ vars.VITE_WEB3FORMS_ACCESS_KEY }}
+      # Accept either the old var name or your new one
+      VITE_RECAPTCHA_SITE_KEY: ${{ vars.VITE_RECAPTCHA_SITE_KEY }}
+      RECAPTCHA_PUBLIC_KEY: ${{ vars.RECAPTCHA_PUBLIC_KEY }}
+      VITE_CONTACT_ENDPOINT: ${{ vars.VITE_CONTACT_ENDPOINT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Create Vite env file (.env.production)
+        run: |
+          echo "VITE_WEB3FORMS_ACCESS_KEY=${{ vars.VITE_WEB3FORMS_ACCESS_KEY }}" >> .env.production
+          # Prefer VITE_RECAPTCHA_SITE_KEY if set; otherwise fallback to RECAPTCHA_PUBLIC_KEY
+          echo "VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY:-${RECAPTCHA_PUBLIC_KEY:-6Lf75tYrAAAAABny5-0q-OmGaEJPsfmDSApgKzug}}" >> .env.production
+          echo "VITE_CONTACT_ENDPOINT=${VITE_CONTACT_ENDPOINT:-https://irontrip-form-recaptcha-proxy.irontrip-fit.workers.dev}" >> .env.production
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -59,19 +76,48 @@ jobs:
           destination_dir: pr-${{ github.event.pull_request.number }}
           keep_files: true
 
-      - name: Comment preview URL on PR
+      - name: Announce preview URL in summary
+        run: |
+          echo "Preview URL: https://irontrip.github.io/landing/pr-${{ github.event.pull_request.number }}/" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment preview URL on PR (non-fatal)
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           PREVIEW_URL: https://irontrip.github.io/landing/pr-${{ github.event.pull_request.number }}/
         run: |
-          set -euo pipefail
           pr='${{ github.event.pull_request.number }}'
-          payload=$(jq -nc --arg body "🚀 Preview deployed: ${PREVIEW_URL}" '{body:$body}')
-          curl -sfSL -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            -d "$payload" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${pr}/comments"
+          gh api repos/${{ github.repository }}/issues/${pr}/comments -f body="🚀 Preview deployed: ${PREVIEW_URL}"
+
+  preview_branch:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/fix/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      - name: Compute branch slug
+        id: slug
+        run: |
+          slug="${GITHUB_REF_NAME//\//-}" # replace slashes with dashes for folder name
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+
+      - name: Publish branch preview to gh-pages/branches/<slug>/
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          publish_branch: gh-pages
+          destination_dir: branches/${{ steps.slug.outputs.slug }}
+          keep_files: true
+
+      - name: Announce preview URL in summary
+        run: |
+          echo "Preview URL: https://irontrip.github.io/landing/branches/${{ steps.slug.outputs.slug }}/" >> "$GITHUB_STEP_SUMMARY"
 
   production:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -90,3 +136,23 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist
           publish_branch: gh-pages
+
+  dev:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+
+      - name: Publish current dev to gh-pages/dev
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
+          publish_branch: gh-pages
+          destination_dir: dev
+          keep_files: true
