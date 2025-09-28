@@ -89,6 +89,13 @@ export default {
       )
     }
 
+    console.log('recaptcha proxy', {
+      origin,
+      targetOrigin: corsOrigin,
+      hasAccessKey: Boolean(accessKey),
+      accessKeyPrefix: accessKey.slice(0, 4),
+    })
+
     // Verify reCAPTCHA token with Google
     const verificationResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
       method: 'POST',
