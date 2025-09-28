@@ -374,65 +374,69 @@ function App() {
         </div>
       </section>
 
-      {/* Value Props */}
-      <section className="relative mt-6 sm:mt-8 lg:mt-10">
-        <div className="mx-auto max-w-7xl px-6 pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Nomads */}
-            <div
-              id="waitlist"
-              tabIndex={-1}
-              className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-indigo-400/60 flex flex-col"
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}icons/road.png`}
-                alt="Road icon"
-                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-85 drop-shadow-xl saturate-150 brightness-110 contrast-125"
-                draggable="false"
-              />
-              <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-indigo-500/10 via-fuchsia-500/5 to-cyan-500/10 pointer-events-none"></div>
+      {/* Nomad Section */}
+      <section id="waitlist" tabIndex={-1} className="relative mt-10 sm:mt-14">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 px-8 py-12 sm:px-12 sm:py-16 shadow-2xl shadow-black/40 ring-1 ring-black/10">
+            <img
+              src={`${import.meta.env.BASE_URL}icons/road.png`}
+              alt="Road icon"
+              className="pointer-events-none select-none absolute -top-6 -right-4 w-24 sm:w-28 opacity-80 drop-shadow-xl saturate-150"
+              draggable="false"
+            />
+            <div className="relative max-w-3xl">
               <p className="text-sm font-semibold uppercase tracking-wider text-indigo-200/80">
                 {t('value.nomadsTitle')}
               </p>
-              <h3 className="mt-2 text-2xl font-bold text-slate-100">{t('value.nomadsHeadline')}</h3>
-              <p className="mt-4 text-slate-300 leading-relaxed">{t('value.nomadsBody')}</p>
-              <div className="mt-auto pt-6">
-                <button
-                  type="button"
-                  onClick={() => setNomadFormOpen(true)}
-                  className="inline-flex items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-400"
-                >
-                  {t('hero.ctaWaitlist')}
-                </button>
-              </div>
+              <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-100">
+                {t('value.nomadsHeadline')}
+              </h2>
+              <p className="mt-6 text-slate-300 leading-relaxed">
+                {t('value.nomadsBody')}
+              </p>
             </div>
-            {/* Locals */}
-            <div
-              id="lend"
-              tabIndex={-1}
-              className="group relative rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/40 ring-1 ring-black/10 transition hover:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-indigo-400/60 flex flex-col"
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}icons/kettlebell.png`}
-                alt="Kettlebell icon"
-                className="pointer-events-none select-none absolute -top-3 -right-3 w-16 sm:w-20 opacity-85 drop-shadow-xl saturate-150 brightness-110 contrast-125"
-                draggable="false"
-              />
-              <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-cyan-500/10 via-fuchsia-500/5 to-indigo-500/10 pointer-events-none"></div>
+            <div className="mt-10">
+              <button
+                type="button"
+                onClick={() => setNomadFormOpen(true)}
+                className="inline-flex items-center rounded-lg bg-indigo-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-400"
+              >
+                {t('hero.ctaWaitlist')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Local Section */}
+      <section id="lend" tabIndex={-1} className="relative mt-10 sm:mt-14">
+        <div className="mx-auto max-w-5xl px-6 pb-20">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 px-8 py-12 sm:px-12 sm:py-16 shadow-2xl shadow-black/40 ring-1 ring-black/10">
+            <img
+              src={`${import.meta.env.BASE_URL}icons/kettlebell.png`}
+              alt="Kettlebell icon"
+              className="pointer-events-none select-none absolute -top-6 -right-4 w-24 sm:w-28 opacity-80 drop-shadow-xl saturate-150"
+              draggable="false"
+            />
+            <div className="relative max-w-3xl">
               <p className="text-sm font-semibold uppercase tracking-wider text-cyan-200/80">
                 {t('value.localsTitle')}
               </p>
-              <h3 className="mt-2 text-2xl font-bold text-slate-100">{t('value.localsHeadline')}</h3>
-              <p className="mt-4 text-slate-300 leading-relaxed">{t('value.localsBody')}</p>
-              <div className="mt-auto pt-6">
-                <button
-                  type="button"
-                  onClick={() => setLocalFormOpen(true)}
-                  className="inline-flex items-center rounded-lg bg-indigo-500 hover:bg-indigo-400 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition"
-                >
-                  {t('hero.ctaLend')}
-                </button>
-              </div>
+              <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-100">
+                {t('value.localsHeadline')}
+              </h2>
+              <p className="mt-6 text-slate-300 leading-relaxed">
+                {t('value.localsBody')}
+              </p>
+            </div>
+            <div className="mt-10">
+              <button
+                type="button"
+                onClick={() => setLocalFormOpen(true)}
+                className="inline-flex items-center rounded-lg bg-indigo-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-400"
+              >
+                {t('hero.ctaLend')}
+              </button>
             </div>
           </div>
         </div>
