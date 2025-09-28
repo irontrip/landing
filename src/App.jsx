@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { translations, getText, availableLangs, detectInitialLang } from './i18n'
 import NomadOnboardingForm from './NomadOnboardingForm'
+import LocalOnboardingForm from './LocalOnboardingForm'
 
 function ContactSection({ lang, endpoint }) {
   const dict = {
@@ -232,6 +233,7 @@ function App() {
   const [lang, setLang] = useState(detectInitialLang())
   const [contactOpen, setContactOpen] = useState(false)
   const [nomadFormOpen, setNomadFormOpen] = useState(false)
+  const [localFormOpen, setLocalFormOpen] = useState(false)
   const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
   const contactEndpoint = import.meta.env.VITE_CONTACT_ENDPOINT
 
@@ -263,7 +265,7 @@ function App() {
 
   useEffect(() => {
     if (typeof document === 'undefined') return
-    const shouldLock = contactOpen || nomadFormOpen
+    const shouldLock = contactOpen || nomadFormOpen || localFormOpen
     const prev = document.body.style.overflow
     if (shouldLock) {
       document.body.style.overflow = 'hidden'
@@ -271,6 +273,7 @@ function App() {
         if (event.key === 'Escape') {
           setContactOpen(false)
           setNomadFormOpen(false)
+          setLocalFormOpen(false)
         }
       }
       window.addEventListener('keydown', onKey)
@@ -282,7 +285,7 @@ function App() {
     return () => {
       document.body.style.overflow = prev
     }
-  }, [contactOpen, nomadFormOpen])
+  }, [contactOpen, nomadFormOpen, localFormOpen])
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -370,9 +373,14 @@ function App() {
               <p className="mt-2 text-2xl font-bold text-slate-100">{t('value.localsHeadline')}</p>
               <p className="mt-4 text-slate-300 leading-relaxed">{t('value.localsBody')}</p>
               <div className="mt-auto pt-6">
-                <a id="lend" href="#" className="inline-flex items-center rounded-lg bg-indigo-500 hover:bg-indigo-400 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition">
+                <button
+                  id="lend"
+                  type="button"
+                  onClick={() => setLocalFormOpen(true)}
+                  className="inline-flex items-center rounded-lg bg-indigo-500 hover:bg-indigo-400 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition"
+                >
                   {t('hero.ctaLend')}
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -388,6 +396,20 @@ function App() {
               recaptchaSiteKey={recaptchaSiteKey}
               endpoint={contactEndpoint}
               onClose={() => setNomadFormOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {localFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setLocalFormOpen(false)}></div>
+          <div role="dialog" aria-modal="true" className="relative z-10 w-full max-w-4xl px-4 sm:px-6 py-8">
+            <LocalOnboardingForm
+              lang={lang}
+              recaptchaSiteKey={recaptchaSiteKey}
+              endpoint={contactEndpoint}
+              onClose={() => setLocalFormOpen(false)}
             />
           </div>
         </div>
