@@ -353,7 +353,7 @@ function App() {
                   onClick={() => setNomadFormOpen(true)}
                   className="inline-flex items-center rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-400"
                 >
-                  {t('hero.ctaNomadOnboarding')}
+                  {t('hero.ctaWaitlist')}
                 </button>
               </div>
             </div>
