@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import LocationAutocomplete from './LocationAutocomplete'
 
 const STRINGS = {
   en: {
@@ -99,6 +100,8 @@ const INITIAL_VALUES = {
   email: '',
   phone: '',
   location: '',
+  locationDetails: null,
+  locationReview: '',
   trainingTools: [],
   experience: '',
   trainingStyle: '',
@@ -119,6 +122,16 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
   const [success, setSuccess] = useState(false)
   const [serverMsg, setServerMsg] = useState('')
   const [botField, setBotField] = useState('')
+
+  function setLocationField(textValue, details) {
+    setValues((prev) => ({
+      ...prev,
+      location: textValue,
+      locationDetails: details || null,
+      locationReview: details?.manual ? 'manual-entry' : '',
+    }))
+    setErrors((prev) => ({ ...prev, location: undefined }))
+  }
 
   function updateValue(field, value) {
     setValues((prev) => ({ ...prev, [field]: value }))
@@ -201,6 +214,8 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
         email: values.email,
         phone: values.phone,
         location: values.location,
+        locationDetails: values.locationDetails ? JSON.stringify(values.locationDetails) : '',
+        locationReview: values.locationReview,
         trainingTools: values.trainingTools.join(', '),
         experienceLevel: values.experience,
         trainingStyle: values.trainingStyle,
@@ -318,19 +333,18 @@ function NomadOnboardingForm({ lang, recaptchaSiteKey, endpoint, onClose }) {
                   className="w-full rounded-md border border-white/15 bg-white/10 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
                 />
               </div>
-              <div>
-                <label className="block text-sm text-slate-300 mb-1">{L.fields.location}</label>
-                <input
-                  type="text"
-                  value={values.location}
-                  onChange={(event) => updateValue('location', event.target.value)}
-                  className="w-full rounded-md border border-white/15 bg-white/10 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-                  aria-invalid={errors.location ? 'true' : 'false'}
-                />
-                {errors.location && (
-                  <p className="mt-1 text-xs text-rose-300">{errors.location}</p>
-                )}
-              </div>
+              <LocationAutocomplete
+                lang={lang}
+                label={L.fields.location}
+                value={values.location}
+                selected={values.locationDetails}
+                onTextChange={(text) => setLocationField(text, null)}
+                onSelect={(details) => {
+                  if (!details) return
+                  setLocationField(details.label, details)
+                }}
+                error={errors.location}
+              />
             </div>
           )}
 
