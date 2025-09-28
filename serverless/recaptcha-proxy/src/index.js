@@ -5,8 +5,8 @@ export default {
     const {
       RECAPTCHA_SECRET,
       RECAPTCHA_SECRET_KEY,
-      W3FORM_ID,
-      WEB3FORMS_ACCESS_KEY,
+      FORM_ENDPOINT,
+      FORM_ENDPOINT_URL,
       ALLOWED_ORIGIN = '',
     } = env
 
@@ -80,22 +80,6 @@ export default {
       )
     }
 
-    const accessKey = W3FORM_ID || WEB3FORMS_ACCESS_KEY
-    if (!accessKey) {
-      return json(
-        { success: false, message: 'Server misconfigured (missing Web3Forms access key)' },
-        500,
-        corsOrigin,
-      )
-    }
-
-    console.log('recaptcha proxy', {
-      origin,
-      targetOrigin: corsOrigin,
-      hasAccessKey: Boolean(accessKey),
-      accessKeyPrefix: accessKey.slice(0, 4),
-    })
-
     // Verify reCAPTCHA token with Google
     const verificationResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
       method: 'POST',
@@ -119,38 +103,41 @@ export default {
     }
 
     // Forward verified payload to Web3Forms
-    const web3Headers = {
+    const forwardHeaders = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     }
     if (originAllowed && origin) {
-      web3Headers.Origin = origin
+      forwardHeaders.Origin = origin
     }
 
-    const web3Response = await fetch('https://api.web3forms.com/submit', {
+    const formEndpoint = FORM_ENDPOINT || FORM_ENDPOINT_URL || 'https://formspree.io/f/xblzderv'
+
+    const forwardResponse = await fetch(formEndpoint, {
       method: 'POST',
-      headers: web3Headers,
+      headers: forwardHeaders,
       body: JSON.stringify({
-        access_key: accessKey,
-        from: email,
-        from_name: name,
-        replyto: email,
-        subject: 'Irontrip Contact',
         name,
         email,
         message,
+        from: email,
+        replyto: email,
+        subject: 'Irontrip Contact',
       }),
     })
 
-    const web3Raw = await web3Response.text().catch(() => '')
-    let web3Data
+    const forwardRaw = await forwardResponse.text().catch(() => '')
+    let forwardData
     try {
-      web3Data = JSON.parse(web3Raw)
+      forwardData = JSON.parse(forwardRaw)
     } catch {
-      web3Data = null
+      forwardData = null
     }
 
-    if (web3Response.ok && web3Data?.success) {
+    if (
+      forwardResponse.ok &&
+      (forwardData?.ok === true || forwardData?.success !== false)
+    ) {
       return json(
         { success: true, message: 'Form submitted successfully.' },
         200,
@@ -162,11 +149,11 @@ export default {
       {
         success: false,
         message:
-          (web3Data && (web3Data.message || web3Data?.error)) ||
-          (web3Raw || 'Web3Forms error'),
-        details: web3Data ?? { raw: web3Raw },
+          (forwardData && (forwardData.message || forwardData?.error)) ||
+          forwardRaw || 'Form endpoint error',
+        details: forwardData ?? { raw: forwardRaw },
       },
-      web3Response.status || 502,
+      forwardResponse.status || 502,
       corsOrigin,
     )
   },

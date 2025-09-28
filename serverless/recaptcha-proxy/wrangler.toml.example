@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2025-01-01"
 
 [vars]
-# Set these via  for security
+# Set these via `wrangler secret put` for security
 # RECAPTCHA_SECRET = "..."
-# W3FORM_ID = "..."
+# FORM_ENDPOINT = "https://formspree.io/f/xblzderv"
 # ALLOWED_ORIGIN = "https://irontrip.github.io"

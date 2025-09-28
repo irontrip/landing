@@ -14,7 +14,7 @@ Deploy (Cloudflare Workers)
 
 Environment variables
 - RECAPTCHA_SECRET: reCAPTCHA v3 secret key (fallback: `RECAPTCHA_SECRET_KEY`)
-- W3FORM_ID: Web3Forms access key / form ID (fallback: `WEB3FORMS_ACCESS_KEY`)
+- FORM_ENDPOINT: URL that receives the verified payload (defaults to `https://formspree.io/f/xblzderv`)
 - ALLOWED_ORIGIN: Origin allowed to call the worker (e.g. `https://irontrip.github.io`)
 
 Endpoint
